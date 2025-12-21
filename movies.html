@@ -1,1 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Movies | Network Unity</title>
+  <link rel="icon" href="/favicon.ico" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
+    body {
+      font-family: 'Space Grotesk', sans-serif;
+      background: #000000;
+      color: #ffffff;
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-size: 3rem;
+      font-weight: 700;
+      letter-spacing: -2px;
+      margin-bottom: 40px;
+      text-align: center;
+      transition: transform 0.1s ease;
+    }
+
+    h1:hover {
+      transform: scale(0.97);
+    }
+
+    .back-btn {
+      display: inline-block;
+      padding: 12px 24px;
+      background: #ffffff;
+      color: #000000;
+      border: 2px solid #ffffff;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.1s ease;
+      margin-bottom: 30px;
+    }
+
+    .back-btn:hover {
+      background: #000000;
+      color: #ffffff;
+    }
+
+    .search-section {
+      background: #000000;
+      color: #ffffff;
+      padding: 30px;
+      margin-bottom: 30px;
+      border: 2px solid #ffffff;
+    }
+
+    .search-section h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      letter-spacing: -1px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 14px 20px;
+      border: 2px solid #ffffff;
+      background: #000000;
+      color: #ffffff;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1rem;
+      outline: none;
+      transition: all 0.1s ease;
+      margin-bottom: 15px;
+    }
+
+    input[type="text"]:focus {
+      border-color: #cccccc;
+    }
+
+    input[type="text"]::placeholder {
+      color: #666666;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      background: #ffffff;
+      color: #000000;
+      border: 2px solid #ffffff;
+      cursor: pointer;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: all 0.1s ease;
+      margin-right: 10px;
+      margin-bottom: 10px;
+    }
+
+    .btn:hover {
+      background: #000000;
+      color: #ffffff;
+    }
+
+    .btn:active {
+      transform: scale(0.96);
+    }
+
+    .source-selector {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+    }
+
+    .source-btn {
+      padding: 10px 20px;
+      background: #000000;
+      color: #ffffff;
+      border: 2px solid #ffffff;
+      cursor: pointer;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: all 0.1s ease;
+    }
+
+    .source-btn:hover {
+      background: #ffffff;
+      color: #000000;
+    }
+
+    .source-btn.active {
+      background: #ffffff;
+      color: #000000;
+    }
+
+    .player-container {
+      background: #000000;
+      border: 2px solid #ffffff;
+      padding: 20px;
+      margin-bottom: 30px;
+      display: none;
+    }
+
+    .player-container.active {
+      display: block;
+    }
+
+    .player-controls {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+    }
+
+    .current-source {
+      color: #cccccc;
+      font-size: 0.9rem;
+      margin-bottom: 15px;
+    }
+
+    iframe {
+      width: 100%;
+      height: 600px;
+      border: 2px solid #ffffff;
+      background: #000000;
+    }
+
+    .popular-section {
+      margin-top: 40px;
+    }
+
+    .popular-section h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      letter-spacing: -1px;
+    }
+
+    .movies-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+    }
+
+    .movie-card {
+      background: #000000;
+      border: 2px solid #ffffff;
+      cursor: pointer;
+      transition: transform 0.1s ease;
+      overflow: hidden;
+    }
+
+    .movie-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .movie-card:active {
+      transform: translateY(0);
+    }
+
+    .movie-poster {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+      display: block;
+      background: #111111;
+    }
+
+    .movie-info {
+      padding: 15px;
+    }
+
+    .movie-title {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 5px;
+      letter-spacing: -0.5px;
+    }
+
+    .movie-year {
+      font-size: 0.85rem;
+      color: #cccccc;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 40px;
+      font-size: 1.2rem;
+      color: #cccccc;
+    }
+
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2rem;
+      }
+
+      iframe {
+        height: 400px;
+      }
+
+      .movies-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      }
+
+      .movie-poster {
+        height: 225px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="/index.html" class="back-btn">← Back</a>
+    
+    <h1>Movies & TV</h1>
+
+    <div class="search-section">
+      <h2>Search for Movies or TV Shows</h2>
+      <input type="text" id="searchInput" placeholder="Enter movie or TV show name (e.g., Inception, Breaking Bad)" />
+      <input type="text" id="tmdbId" placeholder="TMDB/IMDB ID (optional)" />
+      
+      <div class="source-selector">
+        <button class="source-btn active" data-source="vidsrc">VidSrc</button>
+        <button class="source-btn" data-source="vidsrcpro">VidSrc Pro</button>
+        <button class="source-btn" data-source="vidsrcto">VidSrc.to</button>
+        <button class="source-btn" data-source="embedsu">Embed.su</button>
+        <button class="source-btn" data-source="2embed">2Embed</button>
+      </div>
+
+      <button class="btn" onclick="loadMovie()">Load Movie</button>
+      <button class="btn" onclick="loadTVShow()">Load TV Show</button>
+    </div>
+
+    <div class="player-container" id="playerContainer">
+      <div class="player-controls">
+        <button class="btn" onclick="switchSource('vidsrc')">VidSrc</button>
+        <button class="btn" onclick="switchSource('vidsrcpro')">VidSrc Pro</button>
+        <button class="btn" onclick="switchSource('vidsrcto')">VidSrc.to</button>
+        <button class="btn" onclick="switchSource('embedsu')">Embed.su</button>
+        <button class="btn" onclick="switchSource('2embed')">2Embed</button>
+      </div>
+      <div class="current-source" id="currentSource"></div>
+      <iframe id="player" allowfullscreen></iframe>
+    </div>
+
+    <div class="popular-section">
+      <h2>Popular Movies</h2>
+      <div class="movies-grid" id="moviesGrid">
+        <div class="loading">Loading popular movies...</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentType = 'movie';
+    let currentId = '';
+    let selectedSource = 'vidsrc';
+    const TMDB_API_KEY = 'YOUR_API_KEY_HERE';
+
+    document.querySelectorAll('.source-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.source-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        selectedSource = btn.dataset.source;
+      });
+    });
+
+    function getEmbedUrl(source, type, id) {
+      const urls = {
+        vidsrc: `https://vidsrc.me/embed/${type}?${type === 'movie' ? 'imdb' : 'tmdb'}=${id}`,
+        vidsrcpro: `https://vidsrc.pro/embed/${type}/${id}`,
+        vidsrcto: `https://vidsrc.to/embed/${type}/${id}`,
+        embedsu: `https://embed.su/embed/${type}/${id}`,
+        '2embed': `https://www.2embed.cc/embed/${id}`
+      };
+      return urls[source] || urls.vidsrc;
+    }
+
+    function loadMovie() {
+      const search = document.getElementById('searchInput').value;
+      const tmdbId = document.getElementById('tmdbId').value;
+      
+      if (!search && !tmdbId) {
+        alert('Please enter a movie name or ID');
+        return;
+      }
+
+      currentType = 'movie';
+      currentId = tmdbId || search;
+      
+      const url = getEmbedUrl(selectedSource, 'movie', currentId);
+      const player = document.getElementById('player');
+      const container = document.getElementById('playerContainer');
+      const sourceInfo = document.getElementById('currentSource');
+      
+      player.src = url;
+      container.classList.add('active');
+      sourceInfo.textContent = `Source: ${selectedSource.toUpperCase()} | Type: Movie | ID: ${currentId}`;
+      
+      container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function loadTVShow() {
+      const search = document.getElementById('searchInput').value;
+      const tmdbId = document.getElementById('tmdbId').value;
+      
+      if (!search && !tmdbId) {
+        alert('Please enter a TV show name or ID');
+        return;
+      }
+
+      currentType = 'tv';
+      currentId = tmdbId || search;
+      
+      const url = getEmbedUrl(selectedSource, 'tv', currentId);
+      const player = document.getElementById('player');
+      const container = document.getElementById('playerContainer');
+      const sourceInfo = document.getElementById('currentSource');
+      
+      player.src = url;
+      container.classList.add('active');
+      sourceInfo.textContent = `Source: ${selectedSource.toUpperCase()} | Type: TV Show | ID: ${currentId}`;
+      
+      container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function switchSource(source) {
+      if (!currentId) {
+        alert('Please load a movie or TV show first');
+        return;
+      }
+
+      selectedSource = source;
+      const url = getEmbedUrl(source, currentType, currentId);
+      const player = document.getElementById('player');
+      const sourceInfo = document.getElementById('currentSource');
+      
+      player.src = url;
+      sourceInfo.textContent = `Source: ${source.toUpperCase()} | Type: ${currentType === 'movie' ? 'Movie' : 'TV Show'} | ID: ${currentId}`;
+    }
+
+    function loadMovieById(tmdbId, title) {
+      currentType = 'movie';
+      currentId = tmdbId;
+      
+      document.getElementById('searchInput').value = title;
+      document.getElementById('tmdbId').value = tmdbId;
+      
+      const url = getEmbedUrl(selectedSource, 'movie', currentId);
+      const player = document.getElementById('player');
+      const container = document.getElementById('playerContainer');
+      const sourceInfo = document.getElementById('currentSource');
+      
+      player.src = url;
+      container.classList.add('active');
+      sourceInfo.textContent = `Source: ${selectedSource.toUpperCase()} | Type: Movie | ${title}`;
+      
+      container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    async function loadPopularMovies() {
+      const grid = document.getElementById('moviesGrid');
+      
+      const popularMovies = [
+        { id: 278, title: "The Shawshank Redemption", year: "1994", poster: "https://image.tmdb.org/t/p/w500/q6y0Go1tsGEsmtFryDOJo3dEmqu.jpg" },
+        { id: 238, title: "The Godfather", year: "1972", poster: "https://image.tmdb.org/t/p/w500/3bhkrj58Vtu7enYsRolD1fZdja1.jpg" },
+        { id: 240, title: "The Godfather Part II", year: "1974", poster: "https://image.tmdb.org/t/p/w500/hek3koDUyRQk7FIhPXsa6mT2Zc3.jpg" },
+        { id: 424, title: "Schindler's List", year: "1993", poster: "https://image.tmdb.org/t/p/w500/sF1U4EUQS8YHUYjNl3pMGNIQyr0.jpg" },
+        { id: 389, title: "12 Angry Men", year: "1957", poster: "https://image.tmdb.org/t/p/w500/ow3wq89wM8qd5X7hWKxiRfsFf9C.jpg" },
+        { id: 19404, title: "Dilwale Dulhania Le Jayenge", year: "1995", poster: "https://image.tmdb.org/t/p/w500/lfRkUr7DYdHldAqi3PwdQGBRBPM.jpg" },
+        { id: 155, title: "The Dark Knight", year: "2008", poster: "https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg" },
+        { id: 496243, title: "Parasite", year: "2019", poster: "https://image.tmdb.org/t/p/w500/7IiTTgloJzvGI1TAYymCfbfl3vT.jpg" },
+        { id: 129, title: "Spirited Away", year: "2001", poster: "https://image.tmdb.org/t/p/w500/39wmItIWsg5sZMyRUHLkWBcuVCM.jpg" },
+        { id: 497, title: "The Green Mile", year: "1999", poster: "https://image.tmdb.org/t/p/w500/8VG8fDNiy50H4FedGwdSVUPoaJe.jpg" },
+        { id: 680, title: "Pulp Fiction", year: "1994", poster: "https://image.tmdb.org/t/p/w500/d5iIlFn5s0ImszYzBPb8JPIfbXD.jpg" },
+        { id: 13, title: "Forrest Gump", year: "1994", poster: "https://image.tmdb.org/t/p/w500/arw2vcBveWOVZr6pxd9XTd1TdQa.jpg" },
+        { id: 769, title: "GoodFellas", year: "1990", poster: "https://image.tmdb.org/t/p/w500/aKuFiU82s5ISJpGZp7YkIr3kCUd.jpg" },
+        { id: 550, title: "Fight Club", year: "1999", poster: "https://image.tmdb.org/t/p/w500/pB8BM7pdSp6B6Ih7QZ4DrQ3PmJK.jpg" },
+        { id: 122, title: "The Lord of the Rings: The Return of the King", year: "2003", poster: "https://image.tmdb.org/t/p/w500/rCzpDGLbOoPwLjy3OAm5NUPOTrC.jpg" },
+        { id: 274, title: "The Silence of the Lambs", year: "1991", poster: "https://image.tmdb.org/t/p/w500/uS9m8OBk1A8eM9I042bx8XXpqAq.jpg" }
+      ];
+      
+      grid.innerHTML = '';
+      
+      popularMovies.forEach(movie => {
+        const card = document.createElement('div');
+        card.className = 'movie-card';
+        card.onclick = () => loadMovieById(movie.id, movie.title);
+        
+        card.innerHTML = `
+          <img src="${movie.poster}" alt="${movie.title}" class="movie-poster" loading="lazy" />
+          <div class="movie-info">
+            <div class="movie-title">${movie.title}</div>
+            <div class="movie-year">${movie.year}</div>
+          </div>
+        `;
+        
+        grid.appendChild(card);
+      });
+    }
+
+    window.onload = function() {
+      loadPopularMovies();
+    };
+  </script>
+</body>
+</html>
