@@ -1,5 +1,5 @@
 TODO:
-- theme support for games.html, and movies.html (add embeds)
+- theme support for games.html, and movies.html
 
 - fix the proxy-uhh, its a bit glitchy idk why
 
