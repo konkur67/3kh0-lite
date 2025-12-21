@@ -1,1 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Settings | Network Unity</title>
+  <link rel="icon" href="/favicon.ico" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
+    body {
+      font-family: 'Space Grotesk', sans-serif;
+      background: #000000;
+      color: #ffffff;
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-size: 3rem;
+      font-weight: 700;
+      letter-spacing: -2px;
+      margin-bottom: 40px;
+      text-align: center;
+      transition: transform 0.1s ease;
+    }
+
+    h1:hover {
+      transform: scale(0.97);
+    }
+
+    .section {
+      background: #000000;
+      color: #ffffff;
+      padding: 20px;
+      margin-bottom: 15px;
+      border: 2px solid #ffffff;
+    }
+
+    .section h2 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 15px;
+      letter-spacing: -1px;
+    }
+
+    select {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #ffffff;
+      background: #000000;
+      color: #ffffff;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1rem;
+      outline: none;
+      cursor: pointer;
+      transition: all 0.1s ease;
+    }
+
+    select:focus {
+      border-color: #cccccc;
+    }
+
+    select option {
+      background: #000000;
+      color: #ffffff;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 12px;
+      background: #ffffff;
+      color: #000000;
+      border: 2px solid #ffffff;
+      cursor: pointer;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      margin-top: 10px;
+      transition: all 0.1s ease;
+    }
+
+    .btn:hover {
+      background: #000000;
+      color: #ffffff;
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .back-btn {
+      display: inline-block;
+      padding: 12px 24px;
+      background: #ffffff;
+      color: #000000;
+      border: 2px solid #ffffff;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.1s ease;
+      margin-bottom: 30px;
+    }
+
+    .back-btn:hover {
+      background: #000000;
+      color: #ffffff;
+    }
+
+    .status {
+      margin-top: 10px;
+      padding: 10px;
+      background: #ffffff;
+      color: #000000;
+      font-size: 0.85rem;
+      display: none;
+      text-align: center;
+    }
+
+    .status.show {
+      display: block;
+    }
+
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="/index.html" class="back-btn">← Back</a>
+    
+    <h1>Settings</h1>
+
+    <div class="section">
+      <h2>Tab Cloak</h2>
+      <select id="cloakSelect" onchange="applyCloakFromDropdown()">
+        <option value="">Select preset...</option>
+        <option value="google">Google</option>
+        <option value="drive">Google Drive</option>
+        <option value="docs">Google Docs</option>
+        <option value="gmail">Gmail</option>
+        <option value="youtube">YouTube</option>
+        <option value="clever">Clever</option>
+        <option value="canvas">Canvas</option>
+        <option value="schoology">Schoology</option>
+      </select>
+      <button class="btn" onclick="resetCloak()">Reset</button>
+      <div class="status" id="cloakStatus"></div>
+    </div>
+
+    <div class="section">
+      <h2>About:blank Cloak</h2>
+      <button class="btn" ondblclick="openAboutBlank()">Double-Click to Activate</button>
+      <div class="status" id="blankStatus"></div>
+    </div>
+
+    <div class="section">
+      <h2>Blob URL Cloak</h2>
+      <button class="btn" ondblclick="openBlobCloak()">Double-Click to Activate</button>
+      <div class="status" id="blobStatus"></div>
+    </div>
+  </div>
+
+  <script>
+    const cloaks = {
+      google: { title: 'Google', favicon: 'https://www.google.com/favicon.ico' },
+      drive: { title: 'Google Drive', favicon: 'https://ssl.gstatic.com/docs/doclist/images/drive_2022q3_32dp.png' },
+      docs: { title: 'Google Docs', favicon: 'https://ssl.gstatic.com/docs/documents/images/kix-favicon7.ico' },
+      gmail: { title: 'Gmail', favicon: 'https://ssl.gstatic.com/ui/v1/icons/mail/rfr/gmail.ico' },
+      youtube: { title: 'YouTube', favicon: 'https://www.youtube.com/favicon.ico' },
+      clever: { title: 'Clever', favicon: 'https://clever.com/favicon.ico' },
+      canvas: { title: 'Canvas', favicon: 'https://du11hjcvx0uqb.cloudfront.net/dist/images/favicon-e10d657a73.ico' },
+      schoology: { title: 'Schoology', favicon: 'https://asset-cdn.schoology.com/sites/all/themes/schoology_theme/favicon.ico' }
+    };
+
+    function applyCloakFromDropdown() {
+      const select = document.getElementById('cloakSelect');
+      const key = select.value;
+      if (key && cloaks[key]) {
+        setCloak(cloaks[key].title, cloaks[key].favicon);
+        showStatus('cloakStatus', `Cloaked as ${cloaks[key].title}`);
+      }
+    }
+
+    function setCloak(title, favicon) {
+      document.title = title;
+      setFavicon(favicon);
+      localStorage.setItem('cloakTitle', title);
+      localStorage.setItem('cloakFavicon', favicon);
+    }
+
+    function resetCloak() {
+      document.title = 'Network Unity';
+      setFavicon('/favicon.ico');
+      localStorage.removeItem('cloakTitle');
+      localStorage.removeItem('cloakFavicon');
+      document.getElementById('cloakSelect').value = '';
+      showStatus('cloakStatus', 'Reset to default');
+    }
+
+    function setFavicon(url) {
+      let link = document.querySelector("link[rel*='icon']") || document.createElement('link');
+      link.type = 'image/x-icon';
+      link.rel = 'shortcut icon';
+      link.href = url;
+      document.getElementsByTagName('head')[0].appendChild(link);
+    }
+
+    function openAboutBlank() {
+      const popup = window.open('about:blank', '_blank');
+      if (popup) {
+        popup.document.write(`
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>${localStorage.getItem('cloakTitle') || 'Google'}</title>
+            <link rel="icon" href="${localStorage.getItem('cloakFavicon') || 'https://www.google.com/favicon.ico'}">
+          </head>
+          <body style="margin:0;padding:0;overflow:hidden;">
+            <iframe src="${window.location.href}" style="width:100%;height:100vh;border:none;"></iframe>
+          </body>
+          </html>
+        `);
+        popup.document.close();
+        showStatus('blankStatus', 'Opened - close this tab');
+      } else {
+        showStatus('blankStatus', 'Popup blocked');
+      }
+    }
+
+    function openBlobCloak() {
+      const html = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <title>${localStorage.getItem('cloakTitle') || 'Google'}</title>
+          <link rel="icon" href="${localStorage.getItem('cloakFavicon') || 'https://www.google.com/favicon.ico'}">
+        </head>
+        <body style="margin:0;padding:0;overflow:hidden;">
+          <iframe src="${window.location.href}" style="width:100%;height:100vh;border:none;"></iframe>
+        </body>
+        </html>
+      `;
+      const blob = new Blob([html], { type: 'text/html' });
+      const url = URL.createObjectURL(blob);
+      const popup = window.open(url, '_blank');
+      if (popup) {
+        showStatus('blobStatus', 'Opened - close this tab');
+      } else {
+        showStatus('blobStatus', 'Popup blocked');
+      }
+    }
+
+    function showStatus(elementId, message) {
+      const status = document.getElementById(elementId);
+      status.textContent = message;
+      status.classList.add('show');
+      setTimeout(() => {
+        status.classList.remove('show');
+      }, 3000);
+    }
+
+    window.onload = function() {
+      const savedTitle = localStorage.getItem('cloakTitle');
+      const savedFavicon = localStorage.getItem('cloakFavicon');
+      if (savedTitle && savedFavicon) {
+        document.title = savedTitle;
+        setFavicon(savedFavicon);
+      }
+    };
+  </script>
+</body>
+</html>
