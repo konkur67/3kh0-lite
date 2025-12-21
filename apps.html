@@ -1,1 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Apps | Network Unity</title>
+	<link rel="icon" href="/favicon.ico" />
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+	<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet" />
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
 
+		body {
+			font-family: 'Space Grotesk', sans-serif;
+			background: #000000;
+			color: #ffffff;
+			min-height: 100vh;
+			padding: 40px 20px;
+		}
+
+		.container {
+			max-width: 1200px;
+			margin: 0 auto;
+		}
+
+		h1 {
+			font-size: 3rem;
+			font-weight: 700;
+			letter-spacing: -2px;
+			margin-bottom: 40px;
+			text-align: center;
+			transition: transform 0.1s ease;
+		}
+
+		h1:hover {
+			transform: scale(0.97);
+		}
+
+		.back-btn {
+			display: inline-block;
+			padding: 12px 24px;
+			background: #ffffff;
+			color: #000000;
+			border: 2px solid #ffffff;
+			text-decoration: none;
+			font-weight: 600;
+			transition: all 0.1s ease;
+			margin-bottom: 30px;
+		}
+
+		.back-btn:hover {
+			background: #000000;
+			color: #ffffff;
+		}
+
+		.apps-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+			gap: 20px;
+			margin-top: 20px;
+		}
+
+		.app-card {
+			background: #000000;
+			color: #ffffff;
+			padding: 30px;
+			border: 2px solid #ffffff;
+			transition: transform 0.1s ease;
+			cursor: pointer;
+			text-decoration: none;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			gap: 15px;
+			text-align: center;
+		}
+
+		.app-card:hover {
+			transform: translateY(-4px);
+			background: #111111;
+		}
+
+		.app-card:active {
+			transform: translateY(0);
+		}
+
+		.app-icon {
+			font-size: 3rem;
+			color: #ffffff;
+		}
+
+		.app-title {
+			font-size: 1.3rem;
+			font-weight: 700;
+			letter-spacing: -1px;
+		}
+
+		.app-desc {
+			font-size: 0.85rem;
+			color: #cccccc;
+		}
+
+		.category {
+			margin-top: 40px;
+		}
+
+		.category h2 {
+			font-size: 1.8rem;
+			font-weight: 700;
+			margin-bottom: 20px;
+			letter-spacing: -1px;
+		}
+
+		@media (max-width: 768px) {
+			h1 {
+				font-size: 2rem;
+			}
+
+			.apps-grid {
+				grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+			}
+
+			.app-icon {
+				font-size: 2.5rem;
+			}
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<a href="/index.html" class="back-btn">← Back</a>
+
+		<h1>Apps</h1>
+
+		<div class="category">
+			<h2>Social Media</h2>
+			<div class="apps-grid">
+				<a href="#" data-url="https://discord.com" class="app-card">
+					<i class="bi bi-discord app-icon"></i>
+					<div class="app-title">Discord</div>
+					<div class="app-desc">Chat & Communities</div>
+				</a>
+
+				<a href="#" data-url="https://instagram.com" class="app-card">
+					<i class="bi bi-instagram app-icon"></i>
+					<div class="app-title">Instagram</div>
+					<div class="app-desc">Photos & Stories</div>
+				</a>
+
+				<a href="#" data-url="https://facebook.com" class="app-card">
+					<i class="bi bi-facebook app-icon"></i>
+					<div class="app-title">Facebook</div>
+					<div class="app-desc">Social Network</div>
+				</a>
+
+				<a href="#" data-url="https://tiktok.com" class="app-card">
+					<i class="bi bi-tiktok app-icon"></i>
+					<div class="app-title">TikTok</div>
+					<div class="app-desc">Short Videos</div>
+				</a>
+
+				<a href="#" data-url="https://twitter.com" class="app-card">
+					<i class="bi bi-twitter-x app-icon"></i>
+					<div class="app-title">X (Twitter)</div>
+					<div class="app-desc">Microblogging</div>
+				</a>
+
+				<a href="#" data-url="https://reddit.com" class="app-card">
+					<i class="bi bi-reddit app-icon"></i>
+					<div class="app-title">Reddit</div>
+					<div class="app-desc">Communities & Forums</div>
+				</a>
+
+				<a href="#" data-url="https://snapchat.com" class="app-card">
+					<i class="bi bi-snapchat app-icon"></i>
+					<div class="app-title">Snapchat</div>
+					<div class="app-desc">Messaging & Stories</div>
+				</a>
+
+				<a href="#" data-url="https://pinterest.com" class="app-card">
+					<i class="bi bi-pinterest app-icon"></i>
+					<div class="app-title">Pinterest</div>
+					<div class="app-desc">Visual Discovery</div>
+				</a>
+			</div>
+		</div>
+
+		<div class="category">
+			<h2>Media & Entertainment</h2>
+			<div class="apps-grid">
+				<a href="#" data-url="https://youtube.com" class="app-card">
+					<i class="bi bi-youtube app-icon"></i>
+					<div class="app-title">YouTube</div>
+					<div class="app-desc">Video Platform</div>
+				</a>
+
+				<a href="#" data-url="https://twitch.tv" class="app-card">
+					<i class="bi bi-twitch app-icon"></i>
+					<div class="app-title">Twitch</div>
+					<div class="app-desc">Live Streaming</div>
+				</a>
+
+				<a href="#" data-url="https://spotify.com" class="app-card">
+					<i class="bi bi-spotify app-icon"></i>
+					<div class="app-title">Spotify</div>
+					<div class="app-desc">Music Streaming</div>
+				</a>
+
+				<a href="#" data-url="https://netflix.com" class="app-card">
+					<i class="bi bi-film app-icon"></i>
+					<div class="app-title">Netflix</div>
+					<div class="app-desc">Movies & TV Shows</div>
+				</a>
+			</div>
+		</div>
+
+		<div class="category">
+			<h2>Productivity</h2>
+			<div class="apps-grid">
+				<a href="#" data-url="https://gmail.com" class="app-card">
+					<i class="bi bi-envelope app-icon"></i>
+					<div class="app-title">Gmail</div>
+					<div class="app-desc">Email Service</div>
+				</a>
+
+				<a href="#" data-url="https://drive.google.com" class="app-card">
+					<i class="bi bi-cloud app-icon"></i>
+					<div class="app-title">Google Drive</div>
+					<div class="app-desc">Cloud Storage</div>
+				</a>
+
+				<a href="#" data-url="https://docs.google.com" class="app-card">
+					<i class="bi bi-file-text app-icon"></i>
+					<div class="app-title">Google Docs</div>
+					<div class="app-desc">Document Editor</div>
+				</a>
+
+				<a href="#" data-url="https://classroom.google.com" class="app-card">
+					<i class="bi bi-book app-icon"></i>
+					<div class="app-title">Google Classroom</div>
+					<div class="app-desc">Learning Platform</div>
+				</a>
+
+				<a href="#" data-url="https://trello.com" class="app-card">
+					<i class="bi bi-kanban app-icon"></i>
+					<div class="app-title">Trello</div>
+					<div class="app-desc">Project Management</div>
+				</a>
+
+				<a href="#" data-url="https://notion.so" class="app-card">
+					<i class="bi bi-journal-text app-icon"></i>
+					<div class="app-title">Notion</div>
+					<div class="app-desc">Notes & Workspace</div>
+				</a>
+			</div>
+		</div>
+
+		<div class="category">
+			<h2>Other</h2>
+			<div class="apps-grid">
+				<a href="#" data-url="https://github.com" class="app-card">
+					<i class="bi bi-github app-icon"></i>
+					<div class="app-title">GitHub</div>
+					<div class="app-desc">Code Hosting</div>
+				</a>
+
+				<a href="#" data-url="https://chat.openai.com" class="app-card">
+					<i class="bi bi-robot app-icon"></i>
+					<div class="app-title">ChatGPT</div>
+					<div class="app-desc">AI Assistant</div>
+				</a>
+
+				<a href="#" data-url="https://canva.com" class="app-card">
+					<i class="bi bi-palette app-icon"></i>
+					<div class="app-title">Canva</div>
+					<div class="app-desc">Graphic Design</div>
+				</a>
+
+				<a href="#" data-url="https://figma.com" class="app-card">
+					<i class="bi bi-vector-pen app-icon"></i>
+					<div class="app-title">Figma</div>
+					<div class="app-desc">UI/UX Design</div>
+				</a>
+			</div>
+		</div>
+	</div>
+
+	<script src="/active/uv/uv.bundle.js"></script>
+	<script src="/active/uv/uv.config.js"></script>
+	<script src="/assets/js/register.js"></script>
+
+	<script>
+		window.onload = function() {
+			const theme = localStorage.getItem('siteTheme') || 'default';
+			const themes = {
+				default: { bg: '#000000', fg: '#ffffff' },
+				dark: { bg: '#1a1a1a', fg: '#e0e0e0' },
+				blue: { bg: '#000000', fg: '#4a9eff' },
+				green: { bg: '#000000', fg: '#00ff88' },
+				purple: { bg: '#000000', fg: '#bb86fc' },
+				red: { bg: '#000000', fg: '#ff5555' }
+			};
+			const colors = themes[theme] || themes.default;
+			document.body.style.background = colors.bg;
+			document.body.style.color = colors.fg;
+		};
+
+		document.querySelectorAll('.app-card').forEach(card => {
+			card.addEventListener('click', async (e) => {
+				e.preventDefault();
+				const url = card.getAttribute('data-url');
+				
+				try {
+					await registerSW();
+					const encodedUrl = __uv$config.encodeUrl(url);
+					window.location.href = __uv$config.prefix + encodedUrl;
+				} catch (err) {
+					console.error('Proxy error:', err);
+					window.open(url, '_blank');
+				}
+			});
+		});
+	</script>
+</body>
+</html>
