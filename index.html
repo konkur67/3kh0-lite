@@ -345,6 +345,55 @@
   <script src="/assets/js/register.js" defer></script>
   <script src="/assets/js/index.js" defer></script>
   <script>
+    function applyTheme() {
+      const theme = localStorage.getItem('siteTheme') || 'default';
+      const themes = {
+        default: { bg: '#000000', fg: '#ffffff' },
+        dark: { bg: '#1a1a1a', fg: '#e0e0e0' },
+        blue: { bg: '#000000', fg: '#4a9eff' },
+        green: { bg: '#000000', fg: '#00ff88' },
+        purple: { bg: '#000000', fg: '#bb86fc' },
+        red: { bg: '#000000', fg: '#ff5555' }
+      };
+      
+      const colors = themes[theme] || themes.default;
+      document.body.style.background = colors.bg;
+      document.body.style.color = colors.fg;
+      
+      document.querySelectorAll('input[type="text"], button[type="submit"]').forEach(el => {
+        el.style.borderColor = colors.fg;
+        if (el.tagName === 'INPUT') {
+          el.style.background = colors.bg;
+          el.style.color = colors.fg;
+        }
+      });
+      
+      document.querySelectorAll('.sidebar').forEach(el => {
+        el.style.background = colors.fg;
+      });
+      
+      document.querySelectorAll('.sidebar button').forEach(el => {
+        el.style.color = colors.bg;
+      });
+      
+      document.querySelectorAll('.title, .loading-text').forEach(el => {
+        el.style.color = colors.fg;
+      });
+      
+      document.querySelector('.loading-bar-fill').style.background = colors.fg;
+      
+      const frameControls = document.querySelector('.frame-controls');
+      if (frameControls) {
+        frameControls.style.background = colors.fg;
+      }
+      
+      document.querySelectorAll('.frame-controls button').forEach(el => {
+        el.style.background = colors.bg;
+        el.style.color = colors.fg;
+        el.style.borderColor = colors.fg;
+      });
+    }
+
     let currentPage = '';
 
     function loadPage(page) {
@@ -395,6 +444,8 @@
     }
 
     window.onload = function() {
+      applyTheme();
+      
       const loadingScreen = document.getElementById('loadingScreen');
       const loadingBar = document.getElementById('loadingBar');
       let progress = 0;
