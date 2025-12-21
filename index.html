@@ -19,9 +19,6 @@
       background: #000000;
       color: #ffffff;
       height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       overflow: hidden;
     }
 
@@ -90,10 +87,6 @@
       color: #666666;
     }
 
-    .options {
-      display: none;
-    }
-
     button[type="submit"] {
       padding: 14px 40px;
       font-size: 1rem;
@@ -104,7 +97,7 @@
       cursor: pointer;
       transition: all 0.1s ease;
       font-weight: 600;
-      font-family: 'Inter', sans-serif;
+      font-family: 'Space Grotesk', sans-serif;
     }
 
     button[type="submit"]:hover {
@@ -182,6 +175,63 @@
       z-index: 10;
     }
 
+    #pageFrame {
+      position: fixed;
+      top: 60px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90%;
+      height: calc(100% - 80px);
+      border: 2px solid #ffffff;
+      display: none;
+      z-index: 50;
+      background: #000000;
+    }
+
+    .frame-controls {
+      position: fixed;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #ffffff;
+      padding: 8px 16px;
+      display: none;
+      gap: 8px;
+      z-index: 60;
+      align-items: center;
+    }
+
+    .frame-controls button {
+      background: #000000;
+      color: #ffffff;
+      border: 2px solid #000000;
+      padding: 8px 16px;
+      cursor: pointer;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.1s ease;
+    }
+
+    .frame-controls button:hover {
+      background: #ffffff;
+      color: #000000;
+    }
+
+    .frame-controls button:active {
+      transform: scale(0.96);
+    }
+
+    .frame-url {
+      font-size: 0.85rem;
+      color: #000000;
+      font-weight: 600;
+      max-width: 300px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
     @media (max-width: 768px) {
       .title {
         font-size: 2.5rem;
@@ -211,12 +261,12 @@
     </div>
 
     <div class="sidebar">
-      <button onclick="window.location.href='index.html';" title="home"><i class="bi bi-house"></i></button>
-      <button onclick="window.location.href='games.html';" title="Games"><i class="bi bi-controller"></i></button>
-      <button onclick="window.location.href='movies.html';" title="Movies"><i class="bi bi-film"></i></button>
-      <button onclick="window.location.href='apps.html';" title="Apps"><i class="bi bi-google-play"></i></button>
-      <button onclick="window.location.href='tools.html';" title="Tools"><i class="bi bi-tools"></i></button>
-      <button onclick="window.location.href='settings.html';" title="Settings"><i class="bi bi-gear"></i></button>
+      <button onclick="loadPage('home')" title="home"><i class="bi bi-house"></i></button>
+      <button onclick="loadPage('games.html')" title="Games"><i class="bi bi-controller"></i></button>
+      <button onclick="loadPage('movies.html')" title="Movies"><i class="bi bi-film"></i></button>
+      <button onclick="loadPage('apps.html')" title="Apps"><i class="bi bi-google-play"></i></button>
+      <button onclick="loadPage('tools.html')" title="Tools"><i class="bi bi-tools"></i></button>
+      <button onclick="loadPage('settings.html')" title="Settings"><i class="bi bi-gear"></i></button>
       <div class="sidebar-info">
         <span id="battery">⚡</span>
         <span id="time">⌚</span>
@@ -226,11 +276,70 @@
     <div class="footer">Network Unity</div>
   </div>
 
+  <div class="frame-controls" id="frameControls">
+    <span class="frame-url" id="frameUrl">Loading...</span>
+    <button onclick="reloadFrame()" title="Reload">↻</button>
+    <button onclick="openInNewTab()" title="New Tab">⧉</button>
+    <button onclick="toggleFullscreen()" title="Fullscreen">⛶</button>
+    <button onclick="closeFrame()" title="Close">✕</button>
+  </div>
+
+  <iframe id="pageFrame"></iframe>
+
   <script src="/active/uv/uv.bundle.js" defer></script>
   <script src="/active/uv/uv.config.js" defer></script>
   <script src="/assets/js/register.js" defer></script>
   <script src="/assets/js/index.js" defer></script>
   <script>
+    let currentPage = '';
+
+    function loadPage(page) {
+      const frame = document.getElementById('pageFrame');
+      const content = document.getElementById('mainContent');
+      const controls = document.getElementById('frameControls');
+      const frameUrl = document.getElementById('frameUrl');
+      
+      if (page === 'home') {
+        frame.style.display = 'none';
+        content.style.display = 'flex';
+        controls.style.display = 'none';
+        currentPage = '';
+      } else {
+        currentPage = page;
+        frame.src = page;
+        frame.style.display = 'block';
+        content.style.display = 'none';
+        controls.style.display = 'flex';
+        frameUrl.textContent = page;
+      }
+    }
+
+    function reloadFrame() {
+      const frame = document.getElementById('pageFrame');
+      frame.src = frame.src;
+    }
+
+    function openInNewTab() {
+      if (currentPage) {
+        window.open(currentPage, '_blank');
+      }
+    }
+
+    function toggleFullscreen() {
+      const frame = document.getElementById('pageFrame');
+      if (!document.fullscreenElement) {
+        frame.requestFullscreen().catch(err => {
+          console.error('Fullscreen error:', err);
+        });
+      } else {
+        document.exitFullscreen();
+      }
+    }
+
+    function closeFrame() {
+      loadPage('home');
+    }
+
     window.onload = function() {
       document.getElementById('loader').style.display = 'none';
       document.getElementById('content').style.display = 'block';
