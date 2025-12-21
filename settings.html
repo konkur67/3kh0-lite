@@ -144,6 +144,19 @@
     <h1>Settings</h1>
 
     <div class="section">
+      <h2>Theme</h2>
+      <select id="themeSelect" onchange="applyTheme()">
+        <option value="default">Black & White (Default)</option>
+        <option value="dark">Dark Gray</option>
+        <option value="blue">Blue & Black</option>
+        <option value="green">Green & Black</option>
+        <option value="purple">Purple & Black</option>
+        <option value="red">Red & Black</option>
+      </select>
+      <div class="status" id="themeStatus"></div>
+    </div>
+
+    <div class="section">
       <h2>Tab Cloak</h2>
       <select id="cloakSelect" onchange="applyCloakFromDropdown()">
         <option value="">Select preset...</option>
@@ -279,7 +292,57 @@
         document.title = savedTitle;
         setFavicon(savedFavicon);
       }
+      
+      const savedTheme = localStorage.getItem('siteTheme');
+      if (savedTheme) {
+        document.getElementById('themeSelect').value = savedTheme;
+        applyThemeColors(savedTheme);
+      }
     };
+
+    function applyTheme() {
+      const theme = document.getElementById('themeSelect').value;
+      localStorage.setItem('siteTheme', theme);
+      applyThemeColors(theme);
+      showStatus('themeStatus', `Theme changed to ${theme}`);
+    }
+
+    function applyThemeColors(theme) {
+      const themes = {
+        default: { bg: '#000000', fg: '#ffffff', accent: '#ffffff' },
+        dark: { bg: '#1a1a1a', fg: '#e0e0e0', accent: '#666666' },
+        blue: { bg: '#000000', fg: '#4a9eff', accent: '#0066cc' },
+        green: { bg: '#000000', fg: '#00ff88', accent: '#00cc66' },
+        purple: { bg: '#000000', fg: '#bb86fc', accent: '#7b1fa2' },
+        red: { bg: '#000000', fg: '#ff5555', accent: '#cc0000' }
+      };
+      
+      const colors = themes[theme] || themes.default;
+      
+      document.documentElement.style.setProperty('--bg-color', colors.bg);
+      document.documentElement.style.setProperty('--fg-color', colors.fg);
+      document.documentElement.style.setProperty('--accent-color', colors.accent);
+      
+      document.body.style.background = colors.bg;
+      document.body.style.color = colors.fg;
+      
+      document.querySelectorAll('.section').forEach(el => {
+        el.style.borderColor = colors.fg;
+        el.style.color = colors.fg;
+      });
+      
+      document.querySelectorAll('.btn, select').forEach(el => {
+        el.style.background = colors.bg;
+        el.style.color = colors.fg;
+        el.style.borderColor = colors.fg;
+      });
+      
+      document.querySelectorAll('.back-btn').forEach(el => {
+        el.style.background = colors.fg;
+        el.style.color = colors.bg;
+        el.style.borderColor = colors.fg;
+      });
+    }
   </script>
 </body>
 </html>
