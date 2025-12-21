@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -117,6 +118,7 @@
 		}
 	</style>
 </head>
+
 <body>
 	<div class="container">
 		<a href="/index.html" class="back-btn">← Back</a>
@@ -130,13 +132,13 @@
 				<span class="tool-tag">CHROMEBOOK</span>
 			</a>
 
-			<a href="#" data-url="https://chrose.netlify.app" class="tool-card">
+			<a href="#" data-url="https://chromeready.github.io/ext-remover/" class="tool-card">
 				<div class="tool-title">Ext Remover</div>
 				<div class="tool-desc">Methods upon methods of removing extensions</div>
 				<span class="tool-tag">EXTENSION</span>
 			</a>
 
-			<a href="#" data-url="https://github.com/AceOfSpades1061/skiovox-helper_mv3" class="tool-card">
+			<a href="#" data-url="https://github.com/bypassiwastaken/skiovox-helper" class="tool-card">
 				<div class="tool-title">Skiovox Helper</div>
 				<div class="tool-desc">Chrome OS exploit helper and toolkit</div>
 				<span class="tool-tag">CHROMEBOOK</span>
@@ -183,9 +185,23 @@
 	<script src="/active/uv/uv.bundle.js"></script>
 	<script src="/active/uv/uv.config.js"></script>
 	<script src="/assets/js/register.js"></script>
-	<script src="/assets/js/index.js"></script>
 
 	<script>
+		window.onload = function() {
+			const theme = localStorage.getItem('siteTheme') || 'default';
+			const themes = {
+				default: { bg: '#000000', fg: '#ffffff' },
+				dark: { bg: '#1a1a1a', fg: '#e0e0e0' },
+				blue: { bg: '#000000', fg: '#4a9eff' },
+				green: { bg: '#000000', fg: '#00ff88' },
+				purple: { bg: '#000000', fg: '#bb86fc' },
+				red: { bg: '#000000', fg: '#ff5555' }
+			};
+			const colors = themes[theme] || themes.default;
+			document.body.style.background = colors.bg;
+			document.body.style.color = colors.fg;
+		};
+
 		document.querySelectorAll('.tool-card').forEach(card => {
 			card.addEventListener('click', async (e) => {
 				e.preventDefault();
@@ -203,4 +219,5 @@
 		});
 	</script>
 </body>
+
 </html>
