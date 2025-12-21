@@ -116,7 +116,7 @@
       transform: translateY(-50%);
       background: #ffffff;
       padding: 12px;
-      border-radius: 0;
+      border-radius: 12px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -127,16 +127,17 @@
     .sidebar button {
       background: transparent;
       border: none;
-      font-size: 1.8rem;
+      font-size: 1.5rem;
       color: #000000;
-      padding: 8px;
+      padding: 10px;
       cursor: pointer;
       transition: all 0.1s ease;
-      width: 40px;
-      height: 40px;
+      width: 44px;
+      height: 44px;
       display: flex;
       align-items: center;
       justify-content: center;
+      border-radius: 8px;
     }
 
     .sidebar button:hover {
@@ -195,6 +196,7 @@
       transform: translateX(-50%);
       background: #ffffff;
       padding: 8px 16px;
+      border-radius: 8px;
       display: none;
       gap: 8px;
       z-index: 60;
@@ -211,6 +213,7 @@
       font-weight: 600;
       font-size: 0.9rem;
       transition: all 0.1s ease;
+      border-radius: 6px;
     }
 
     .frame-controls button:hover {
@@ -232,6 +235,48 @@
       white-space: nowrap;
     }
 
+    #loadingScreen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #000000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+
+    .loading-container {
+      width: 300px;
+      text-align: center;
+    }
+
+    .loading-text {
+      color: #ffffff;
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      letter-spacing: -1px;
+    }
+
+    .loading-bar-bg {
+      width: 100%;
+      height: 8px;
+      background: #333333;
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    .loading-bar-fill {
+      height: 100%;
+      background: #ffffff;
+      border-radius: 20px;
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
     @media (max-width: 768px) {
       .title {
         font-size: 2.5rem;
@@ -249,6 +294,15 @@
   </style>
 </head>
 <body>
+  <div id="loadingScreen">
+    <div class="loading-container">
+      <div class="loading-text">Network Unity</div>
+      <div class="loading-bar-bg">
+        <div class="loading-bar-fill" id="loadingBar"></div>
+      </div>
+    </div>
+  </div>
+
   <div id="mainContent">
     <div id="loader" class="loader" style="display:none;">Loading...</div>
     
@@ -261,12 +315,12 @@
     </div>
 
     <div class="sidebar">
-      <button onclick="loadPage('home')" title="home"><i class="bi bi-house"></i></button>
+      <button onclick="loadPage('home')" title="home"><i class="bi bi-house-fill"></i></button>
       <button onclick="loadPage('games.html')" title="Games"><i class="bi bi-controller"></i></button>
       <button onclick="loadPage('movies.html')" title="Movies"><i class="bi bi-film"></i></button>
-      <button onclick="loadPage('apps.html')" title="Apps"><i class="bi bi-google-play"></i></button>
-      <button onclick="loadPage('tools.html')" title="Tools"><i class="bi bi-tools"></i></button>
-      <button onclick="loadPage('settings.html')" title="Settings"><i class="bi bi-gear"></i></button>
+      <button onclick="loadPage('apps.html')" title="Apps"><i class="bi bi-app"></i></button>
+      <button onclick="loadPage('tools.html')" title="Tools"><i class="bi bi-wrench"></i></button>
+      <button onclick="loadPage('settings.html')" title="Settings"><i class="bi bi-gear-fill"></i></button>
       <div class="sidebar-info">
         <span id="battery">⚡</span>
         <span id="time">⌚</span>
@@ -341,8 +395,25 @@
     }
 
     window.onload = function() {
-      document.getElementById('loader').style.display = 'none';
-      document.getElementById('content').style.display = 'block';
+      const loadingScreen = document.getElementById('loadingScreen');
+      const loadingBar = document.getElementById('loadingBar');
+      let progress = 0;
+      
+      const interval = setInterval(() => {
+        progress += Math.random() * 30;
+        if (progress >= 100) {
+          progress = 100;
+          loadingBar.style.width = '100%';
+          setTimeout(() => {
+            loadingScreen.style.display = 'none';
+            document.getElementById('loader').style.display = 'none';
+            document.getElementById('content').style.display = 'block';
+          }, 300);
+          clearInterval(interval);
+        } else {
+          loadingBar.style.width = progress + '%';
+        }
+      }, 200);
       
       if (navigator.getBattery) {
         navigator.getBattery().then(battery => {
