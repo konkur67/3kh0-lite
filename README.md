@@ -2,7 +2,5 @@ TODO:
 
 - fix the proxy-uhh, its a bit glitchy idk why
 
-- possible particles.js
-
-- make sure the ai is working (thru duck.ai)
+- ai is acting up weird.. (thru duck.ai)
 
