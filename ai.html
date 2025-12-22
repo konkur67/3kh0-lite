@@ -1,1 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI Chat | Network Unity</title>
+  <link rel="icon" href="/favicon.ico" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
+    body {
+      font-family: 'Space Grotesk', sans-serif;
+      background: #000000;
+      color: #ffffff;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .header {
+      padding: 20px;
+      border-bottom: 2px solid #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .back-btn, .clear-btn {
+      padding: 10px 20px;
+      background: #ffffff;
+      color: #000000;
+      border: 2px solid #ffffff;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.1s ease;
+      cursor: pointer;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.9rem;
+    }
+
+    .back-btn:hover, .clear-btn:hover {
+      background: #000000;
+      color: #ffffff;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -1px;
+    }
+
+    .chat-container {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .message {
+      max-width: 70%;
+      padding: 15px 20px;
+      border: 2px solid #ffffff;
+      word-wrap: break-word;
+      white-space: pre-wrap;
+      line-height: 1.5;
+    }
+
+    .message.user {
+      align-self: flex-end;
+      background: #ffffff;
+      color: #000000;
+    }
+
+    .message.ai {
+      align-self: flex-start;
+      background: #000000;
+      color: #ffffff;
+    }
+
+    .message.loading {
+      opacity: 0.7;
+      font-style: italic;
+    }
+
+    .input-container {
+      padding: 20px;
+      border-top: 2px solid #ffffff;
+      display: flex;
+      gap: 10px;
+    }
+
+    textarea {
+      flex: 1;
+      padding: 12px 20px;
+      border: 2px solid #ffffff;
+      background: #000000;
+      color: #ffffff;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1rem;
+      outline: none;
+      resize: none;
+      min-height: 50px;
+      max-height: 150px;
+      transition: all 0.1s ease;
+    }
+
+    textarea:focus {
+      border-color: #cccccc;
+    }
+
+    textarea::placeholder {
+      color: #666666;
+    }
+
+    .send-btn {
+      padding: 12px 24px;
+      background: #ffffff;
+      color: #000000;
+      border: 2px solid #ffffff;
+      cursor: pointer;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: all 0.1s ease;
+      align-self: flex-end;
+    }
+
+    .send-btn:hover {
+      background: #000000;
+      color: #ffffff;
+    }
+
+    .send-btn:active {
+      transform: scale(0.98);
+    }
+
+    .send-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    @media (max-width: 768px) {
+      .message {
+        max-width: 85%;
+      }
+
+      h1 {
+        font-size: 1.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <a href="/index.html" class="back-btn">← Back</a>
+    <h1>AI Chat</h1>
+    <button class="clear-btn" onclick="clearChat()">Clear</button>
+  </div>
+
+  <div class="chat-container" id="chatContainer"></div>
+
+  <div class="input-container">
+    <textarea id="messageInput" placeholder="Ask me anything..." rows="1"></textarea>
+    <button class="send-btn" id="sendBtn" onclick="sendMessage()">Send</button>
+  </div>
+
+  <script>
+    let vqdToken = null;
+
+    window.onload = function() {
+      applyTheme();
+      
+      const textarea = document.getElementById('messageInput');
+      textarea.addEventListener('input', function() {
+        this.style.height = 'auto';
+        this.style.height = Math.min(this.scrollHeight, 150) + 'px';
+      });
+
+      textarea.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          sendMessage();
+        }
+      });
+
+      getVQDToken();
+    };
+
+    function applyTheme() {
+      const theme = localStorage.getItem('siteTheme') || 'default';
+      const themes = {
+        default: { bg: '#000000', fg: '#ffffff' },
+        dark: { bg: '#1a1a1a', fg: '#e0e0e0' },
+        blue: { bg: '#000000', fg: '#4a9eff' },
+        green: { bg: '#000000', fg: '#00ff88' },
+        purple: { bg: '#000000', fg: '#bb86fc' },
+        red: { bg: '#000000', fg: '#ff5555' }
+      };
+      const colors = themes[theme] || themes.default;
+      
+      document.body.style.background = colors.bg;
+      document.body.style.color = colors.fg;
+      
+      document.querySelectorAll('.header, textarea, .message.ai, .input-container').forEach(el => {
+        el.style.borderColor = colors.fg;
+      });
+      
+      document.querySelectorAll('textarea').forEach(el => {
+        el.style.color = colors.fg;
+      });
+      
+      document.querySelectorAll('.message.ai').forEach(el => {
+        el.style.color = colors.fg;
+      });
+      
+      document.querySelectorAll('.back-btn, .send-btn, .clear-btn').forEach(el => {
+        el.style.background = colors.fg;
+        el.style.color = colors.bg;
+        el.style.borderColor = colors.fg;
+      });
+
+      document.querySelector('h1').style.color = colors.fg;
+    }
+
+    async function getVQDToken() {
+      try {
+        const response = await fetch('https://corsproxy.io/?' + encodeURIComponent('https://duckduckgo.com/duckchat/v1/status'), {
+          headers: {
+            'x-vqd-accept': '1'
+          }
+        });
+        vqdToken = response.headers.get('x-vqd-4');
+      } catch (error) {
+        console.error('Failed to get VQD token:', error);
+      }
+    }
+
+    function addMessage(text, isUser) {
+      const chatContainer = document.getElementById('chatContainer');
+      const messageDiv = document.createElement('div');
+      messageDiv.className = `message ${isUser ? 'user' : 'ai'}`;
+      messageDiv.textContent = text;
+      chatContainer.appendChild(messageDiv);
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+      applyTheme();
+      return messageDiv;
+    }
+
+    async function sendMessage() {
+      const textarea = document.getElementById('messageInput');
+      const sendBtn = document.getElementById('sendBtn');
+      const message = textarea.value.trim();
+      
+      if (!message) return;
+
+      addMessage(message, true);
+      textarea.value = '';
+      textarea.style.height = 'auto';
+      sendBtn.disabled = true;
+
+      const loadingMsg = addMessage('Thinking...', false);
+      loadingMsg.classList.add('loading');
+
+      try {
+        if (!vqdToken) await getVQDToken();
+
+        const response = await fetch('https://corsproxy.io/?' + encodeURIComponent('https://duckduckgo.com/duckchat/v1/chat'), {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-vqd-4': vqdToken || ''
+          },
+          body: JSON.stringify({
+            model: 'gpt-4o-mini',
+            messages: [{ role: 'user', content: message }]
+          })
+        });
+
+        loadingMsg.remove();
+
+        if (!response.ok) {
+          throw new Error('API request failed');
+        }
+
+        const data = await response.json();
+        let aiResponse = '';
+        
+        if (data.message) {
+          aiResponse = data.message;
+        } else if (typeof data === 'string') {
+          aiResponse = data;
+        } else {
+          aiResponse = 'Sorry, I received an unexpected response format.';
+        }
+
+        addMessage(aiResponse, false);
+        vqdToken = response.headers.get('x-vqd-4') || vqdToken;
+
+      } catch (error) {
+        loadingMsg.remove();
+        addMessage('Error: Could not connect to AI service. Please try again.', false);
+        console.error('Error:', error);
+      }
+
+      sendBtn.disabled = false;
+    }
+
+    function clearChat() {
+      document.getElementById('chatContainer').innerHTML = '';
+      getVQDToken();
+    }
+  </script>
+</body>
+</html>
