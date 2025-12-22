@@ -109,6 +109,13 @@
     "imgSrc": "projects/cell-machine/img/te9nDu.png",
     "title": "Cell Machine"
   },
+ {
+    "link": "projects/celeste/index.html",
+    "imgSrc": "projects/celeste/img/celesteicon.png",
+    "title": "Celeste"
+  },
+
+  
   {
     "link": "projects/championarcher/index.html",
     "imgSrc": "projects/championarcher/championarcher.png",
@@ -344,6 +351,12 @@
     "imgSrc": "projects/hextris/images/hextris-logo.png",
     "title": "Hextris"
   },
+  {
+    "link": "projects/hk/index.html",
+    "imgSrc": "projects/hk/images/hkicon.png",
+    "title": "Hollow Knight"
+  },
+  
   {
     "link": "projects/idle-breakout/index.html",
     "imgSrc": "projects/idle-breakout/img/thumbnail.png",
