@@ -7,6 +7,7 @@
   <link rel="icon" type="image/x-icon" href="favicon.ico" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <style>
     * {
       margin: 0;
@@ -28,6 +29,17 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    #particles-js {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: 1;
     }
 
     .loader {
@@ -294,6 +306,8 @@
   </style>
 </head>
 <body>
+  <div id="particles-js"></div>
+  
   <div id="loadingScreen">
     <div class="loading-container">
       <div class="loading-text">Network Unity</div>
@@ -320,9 +334,7 @@
       <button onclick="loadPage('movies.html')" title="Movies"><i class="bi bi-film"></i></button>
       <button onclick="loadPage('apps.html')" title="Apps"><i class="bi bi-app"></i></button>
       <button onclick="loadPage('tools.html')" title="Tools"><i class="bi bi-wrench"></i></button>
-      <button onclick="loadPage('ai.html')" title="NU AI"><i class="bi bi-robot"></i></button>
       <button onclick="loadPage('settings.html')" title="Settings"><i class="bi bi-gear-fill"></i></button>
-      <button onclick="loadPage('credits.html')" title="Credits"><i class="bi bi-info-circle"></i></button>
       <div class="sidebar-info">
         <span id="battery">⚡</span>
         <span id="time">⌚</span>
@@ -447,6 +459,45 @@
 
     window.onload = function() {
       applyTheme();
+      
+      particlesJS('particles-js', {
+        particles: {
+          number: { value: 80, density: { enable: true, value_area: 800 } },
+          color: { value: '#ffffff' },
+          shape: { type: 'circle' },
+          opacity: { value: 0.5, random: false },
+          size: { value: 3, random: true },
+          line_linked: {
+            enable: true,
+            distance: 150,
+            color: '#ffffff',
+            opacity: 0.4,
+            width: 1
+          },
+          move: {
+            enable: true,
+            speed: 2,
+            direction: 'none',
+            random: false,
+            straight: false,
+            out_mode: 'out',
+            bounce: false
+          }
+        },
+        interactivity: {
+          detect_on: 'canvas',
+          events: {
+            onhover: { enable: true, mode: 'repulse' },
+            onclick: { enable: true, mode: 'push' },
+            resize: true
+          },
+          modes: {
+            repulse: { distance: 100, duration: 0.4 },
+            push: { particles_nb: 4 }
+          }
+        },
+        retina_detect: true
+      });
       
       const loadingScreen = document.getElementById('loadingScreen');
       const loadingBar = document.getElementById('loadingBar');
