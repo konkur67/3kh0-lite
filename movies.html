@@ -297,6 +297,7 @@
         
         <select id="sourceSelect">
           <option value="vidlink">VidLink Pro</option>
+          <option value="sanction">Sanction TV</option>
           <option value="vidsrc">VidSrc</option>
           <option value="vidsrcpro">VidSrc Pro</option>
           <option value="vidsrcto">VidSrc.to</option>
@@ -318,6 +319,7 @@
         <div class="current-source" id="currentSource"></div>
         <select class="source-dropdown" id="playerSource" onchange="switchSource()">
           <option value="vidlink">VidLink Pro</option>
+          <option value="sanction">Sanction TV</option>
           <option value="vidsrc">VidSrc</option>
           <option value="vidsrcpro">VidSrc Pro</option>
           <option value="vidsrcto">VidSrc.to</option>
@@ -347,6 +349,7 @@
         vidsrcpro: `https://vidsrc.pro/embed/${type}/${id}`,
         vidsrcto: `https://vidsrc.to/embed/${type}/${id}`,
         vidlink: `https://vidlink.pro/${type}/${id}`,
+        sanction: `https://stream.sanction.tv/${type}/${id}`,
         embedsu: `https://embed.su/embed/${type}/${id}`,
         '2embed': `https://www.2embed.cc/embed/${id}`
       };
@@ -476,6 +479,41 @@
     }
 
     loadPopularMovies();
+
+    window.onload = function() {
+      const theme = localStorage.getItem('siteTheme') || 'default';
+      const themes = {
+        default: { bg: '#000000', fg: '#ffffff' },
+        dark: { bg: '#1a1a1a', fg: '#e0e0e0' },
+        blue: { bg: '#000000', fg: '#4a9eff' },
+        green: { bg: '#000000', fg: '#00ff88' },
+        purple: { bg: '#000000', fg: '#bb86fc' },
+        red: { bg: '#000000', fg: '#ff5555' }
+      };
+      const colors = themes[theme] || themes.default;
+      
+      document.body.style.background = colors.bg;
+      document.body.style.color = colors.fg;
+      
+      document.querySelectorAll('.search-section, .player-container, .search-results, .movie-card').forEach(el => {
+        el.style.borderColor = colors.fg;
+      });
+      
+      document.querySelectorAll('input[type="text"], select, .source-dropdown').forEach(el => {
+        el.style.borderColor = colors.fg;
+        el.style.color = colors.fg;
+      });
+      
+      document.querySelectorAll('.back-btn').forEach(el => {
+        el.style.background = colors.fg;
+        el.style.color = colors.bg;
+        el.style.borderColor = colors.fg;
+      });
+      
+      document.querySelectorAll('h1, h2').forEach(el => {
+        el.style.color = colors.fg;
+      });
+    };
   </script>
 </body>
 </html>
