@@ -21,6 +21,10 @@
       padding: 40px 20px;
     }
 
+    .back-btn {
+      display: none;
+    }
+
     .container {
       max-width: 600px;
       margin: 0 auto;
@@ -139,8 +143,6 @@
 </head>
 <body>
   <div class="container">
-    <a href="/index.html" class="back-btn">← Back</a>
-    
     <h1>Settings</h1>
 
     <div class="section">
@@ -303,8 +305,15 @@
     function applyTheme() {
       const theme = document.getElementById('themeSelect').value;
       localStorage.setItem('siteTheme', theme);
-      applyThemeColors(theme);
-      showStatus('themeStatus', `Theme changed to ${theme}`);
+      showStatus('themeStatus', `Theme changed to ${theme} - Refreshing...`);
+      
+      setTimeout(() => {
+        if (window.parent !== window) {
+          window.parent.location.reload();
+        } else {
+          window.location.reload();
+        }
+      }, 500);
     }
 
     function applyThemeColors(theme) {
