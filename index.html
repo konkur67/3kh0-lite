@@ -307,6 +307,32 @@
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+      cursor: text;
+      padding: 6px 10px;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+    }
+
+    .frame-url:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .frame-url-input {
+      font-size: 0.85rem;
+      color: #fff;
+      font-weight: 400;
+      width: 400px;
+      padding: 6px 10px;
+      background: rgba(40, 40, 40, 0.9);
+      border: 1px solid #555;
+      border-radius: 6px;
+      outline: none;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .frame-url-input:focus {
+      border-color: #888;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
     }
 
     .loader {
@@ -381,7 +407,8 @@
   </div>
 
   <div class="frame-controls" id="frameControls">
-    <span class="frame-url" id="frameUrl">Loading...</span>
+    <span class="frame-url" id="frameUrl" onclick="editURL()">Loading...</span>
+    <input type="text" class="frame-url-input" id="frameUrlInput" style="display: none;" />
     <button onclick="reloadFrame()" title="Reload">↻</button>
     <button onclick="openInNewTab()" title="New Tab">⧉</button>
     <button onclick="toggleFullscreen()" title="Fullscreen">⛶</button>
@@ -411,6 +438,65 @@
 
     let currentPage = '';
     let currentProxiedUrl = '';
+    let currentDisplayUrl = '';
+    
+    function editURL() {
+      const urlSpan = document.getElementById('frameUrl');
+      const urlInput = document.getElementById('frameUrlInput');
+      
+      urlSpan.style.display = 'none';
+      urlInput.style.display = 'block';
+      urlInput.value = currentDisplayUrl;
+      urlInput.focus();
+      urlInput.select();
+    }
+
+    function finishEditURL() {
+      const urlSpan = document.getElementById('frameUrl');
+      const urlInput = document.getElementById('frameUrlInput');
+      const newUrl = urlInput.value.trim();
+      
+      if (newUrl && newUrl !== currentDisplayUrl) {
+        let url = newUrl.startsWith('http://') || newUrl.startsWith('https://') 
+          ? newUrl 
+          : 'https://' + newUrl;
+        
+        if (typeof __uv$config !== 'undefined') {
+          const proxiedUrl = __uv$config.prefix + __uv$config.encodeUrl(url);
+          currentProxiedUrl = proxiedUrl;
+          currentDisplayUrl = url;
+          
+          const frame = document.getElementById('pageFrame');
+          frame.src = proxiedUrl;
+          
+          urlSpan.textContent = url;
+        }
+      }
+      
+      urlSpan.style.display = 'block';
+      urlInput.style.display = 'none';
+    }
+
+    document.addEventListener('keydown', function(e) {
+      const urlInput = document.getElementById('frameUrlInput');
+      if (urlInput.style.display === 'block') {
+        if (e.key === 'Enter') {
+          finishEditURL();
+        } else if (e.key === 'Escape') {
+          const urlSpan = document.getElementById('frameUrl');
+          urlSpan.style.display = 'block';
+          urlInput.style.display = 'none';
+        }
+      }
+    });
+
+    document.addEventListener('click', function(e) {
+      const urlInput = document.getElementById('frameUrlInput');
+      const urlSpan = document.getElementById('frameUrl');
+      if (urlInput.style.display === 'block' && !urlInput.contains(e.target) && !urlSpan.contains(e.target)) {
+        finishEditURL();
+      }
+    });
     
     let isDragging = false;
     let dragOffsetX = 0;
@@ -466,9 +552,11 @@
         controls.style.display = 'none';
         currentPage = '';
         currentProxiedUrl = '';
+        currentDisplayUrl = '';
       } else {
         currentPage = page;
         currentProxiedUrl = page;
+        currentDisplayUrl = page;
         frame.src = page;
         frame.style.display = 'block';
         content.style.display = 'none';
@@ -553,6 +641,7 @@
           content.style.display = 'none';
           controls.style.display = 'flex';
           frameUrl.textContent = url;
+          currentDisplayUrl = url;
           currentPage = proxiedUrl;
           
           urlInput.value = '';
