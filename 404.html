@@ -1,11 +1,193 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>404 | Network Unity</title>
-  </head>
-  <body>
-    <h1>404</h1>
-    <p>Page not found. Something's broken :(</p>
-    <a href="/">Go to Homepage</a>
-  </body>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>404 - Network Unity</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: #000000;
+      color: #ffffff;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .stars {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: 1;
+    }
+
+    .star {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      background: white;
+      border-radius: 50%;
+      box-shadow: 0 0 2px rgba(255, 255, 255, 0.5);
+      animation: twinkle 4s infinite;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.2; }
+      50% { opacity: 1; }
+    }
+
+    .container {
+      text-align: center;
+      z-index: 10;
+      position: relative;
+    }
+
+    .error-code {
+      font-size: 10rem;
+      font-weight: 700;
+      letter-spacing: -5px;
+      color: #ffffff;
+      margin-bottom: 20px;
+      text-shadow: 0 0 60px rgba(255, 255, 255, 0.4),
+                   0 0 100px rgba(255, 255, 255, 0.2);
+      animation: glow 3s ease-in-out infinite;
+    }
+
+    @keyframes glow {
+      0%, 100% {
+        text-shadow: 0 0 60px rgba(255, 255, 255, 0.4),
+                     0 0 100px rgba(255, 255, 255, 0.2);
+      }
+      50% {
+        text-shadow: 0 0 80px rgba(255, 255, 255, 0.6),
+                     0 0 120px rgba(255, 255, 255, 0.3);
+      }
+    }
+
+    .error-message {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #ffffff;
+      margin-bottom: 10px;
+      letter-spacing: -1px;
+    }
+
+    .error-description {
+      font-size: 1rem;
+      font-weight: 300;
+      color: #666;
+      margin-bottom: 50px;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      align-items: center;
+    }
+
+    a {
+      text-decoration: none;
+    }
+
+    button {
+      padding: 14px 36px;
+      font-size: 0.95rem;
+      border: 1px solid #444;
+      border-radius: 10px;
+      background: rgba(40, 40, 40, 0.8);
+      color: #ffffff;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+    }
+
+    button:hover {
+      background: rgba(60, 60, 60, 0.9);
+      border-color: #666;
+      transform: translateY(-2px);
+      box-shadow: 0 0 40px rgba(255, 255, 255, 0.2);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    .back-button {
+      background: rgba(60, 60, 60, 0.8);
+    }
+
+    @media (max-width: 768px) {
+      .error-code {
+        font-size: 6rem;
+      }
+
+      .error-message {
+        font-size: 1.2rem;
+      }
+
+      .error-description {
+        font-size: 0.9rem;
+      }
+
+      .buttons {
+        flex-direction: column;
+      }
+
+      button {
+        width: 100%;
+        max-width: 250px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="stars" id="stars"></div>
+
+  <div class="container">
+    <div class="error-code">404</div>
+    <div class="error-message">Page Not Found</div>
+    <div class="error-description">The page you're looking for doesn't exist or has been moved.</div>
+    <div class="buttons">
+      <a href="/index.html">
+        <button>Go Home</button>
+      </a>
+      <button class="back-button" onclick="history.back()">Go Back</button>
+    </div>
+  </div>
+
+  <script>
+    function createStars() {
+      const starsContainer = document.getElementById('stars');
+      const starCount = 200;
+      
+      for (let i = 0; i < starCount; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+        star.style.left = Math.random() * 100 + '%';
+        star.style.top = Math.random() * 100 + '%';
+        star.style.animationDelay = Math.random() * 4 + 's';
+        star.style.animationDuration = (Math.random() * 4 + 3) + 's';
+        starsContainer.appendChild(star);
+      }
+    }
+
+    createStars();
+  </script>
+</body>
 </html>
