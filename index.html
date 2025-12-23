@@ -387,7 +387,6 @@
   <script src="/active/uv/uv.bundle.js"></script>
   <script src="/active/uv/uv.config.js"></script>
   <script src="/assets/js/register.js"></script>
-  <script src="/assets/js/index.js"></script>
   <script>
     function createStars() {
       const starsContainer = document.getElementById('stars');
@@ -456,11 +455,66 @@
       loadPage('home');
     }
 
-    window.onload = function() {
+    window.addEventListener('load', function() {
       createStars();
       
       document.getElementById('loader').style.display = 'none';
       document.getElementById('content').style.display = 'block';
+      
+      const searchForm = document.getElementById('searchForm');
+      const urlInput = document.getElementById('urlInput');
+      
+      console.log('Form handler attached');
+      
+      searchForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        console.log('Form submitted');
+        
+        let input = urlInput.value.trim();
+        if (!input) return;
+        
+        console.log('Input:', input);
+        
+        let url;
+        if (input.includes('.') && !input.includes(' ')) {
+          url = input.startsWith('http://') || input.startsWith('https://') 
+            ? input 
+            : 'https://' + input;
+        } else {
+          url = 'https://duckduckgo.com/?q=' + encodeURIComponent(input);
+        }
+        
+        console.log('URL:', url);
+        console.log('UV Config:', typeof __uv$config);
+        
+        if (typeof __uv$config !== 'undefined') {
+          const proxiedUrl = __uv$config.prefix + __uv$config.encodeUrl(url);
+          currentProxiedUrl = proxiedUrl;
+          
+          console.log('Proxied URL:', proxiedUrl);
+          
+          const frame = document.getElementById('pageFrame');
+          const content = document.getElementById('mainContent');
+          const controls = document.getElementById('frameControls');
+          const frameUrl = document.getElementById('frameUrl');
+          
+          frame.src = proxiedUrl;
+          frame.style.display = 'block';
+          content.style.display = 'none';
+          controls.style.display = 'flex';
+          frameUrl.textContent = url;
+          currentPage = proxiedUrl;
+          
+          urlInput.value = '';
+        } else {
+          console.error('UV config not loaded');
+          alert('Proxy not ready. Check console for errors.');
+        }
+        
+        return false;
+      });
       
       if (navigator.getBattery) {
         navigator.getBattery().then(battery => {
@@ -482,7 +536,7 @@
       }
       setInterval(updateTime, 1000);
       updateTime();
-    };
+    });
   </script>
 </body>
 </html>
