@@ -243,6 +243,16 @@
       font-size: 0.9rem;
     }
 
+    .footer-link {
+      color: #333;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .footer-link:hover {
+      color: #888;
+    }
+
     #pageFrame {
       position: fixed;
       top: 0;
@@ -385,6 +395,10 @@
       <button onclick="loadPage('settings.html')" title="Settings"><i class="bi bi-gear-fill"></i></button>
       <button onclick="loadPage('credits.html')" title="Credits"><i class="bi bi-info-circle"></i></button>
       <div class="sidebar-info">
+        <a href="https://discord.gg/gDcFWtWWZh" target="_blank" style="text-decoration: none;">
+          <button title="Discord"><i class="bi bi-discord"></i></button>
+        </a>
+        <div style="width: 100%; height: 1px; background: #222; margin: 8px 0;"></div>
         <span id="battery">⚡</span>
         <span id="time">⌚</span>
       </div>
@@ -392,16 +406,17 @@
 
     <div class="footer">
       <div class="footer-item">
-        <i class="bi bi-clock footer-icon"></i>
-        <span id="footerTime">12:00 PM</span>
+        <i class="bi bi-cpu footer-icon"></i>
+        <span id="footerCPU">Loading...</span>
       </div>
       <div class="footer-item">
-        <i class="bi bi-battery-charging footer-icon"></i>
-        <span id="footerBattery">100%</span>
+        <i class="bi bi-speedometer2 footer-icon"></i>
+        <span id="footerPing">Ping: --ms</span>
       </div>
       <div class="footer-item">
-        <i class="bi bi-thermometer-half footer-icon"></i>
-        <span id="footerWeather">72°F</span>
+        <a href="https://github.com" target="_blank" class="footer-link" title="GitHub">
+          <i class="bi bi-github footer-icon"></i>
+        </a>
       </div>
     </div>
   </div>
@@ -457,9 +472,14 @@
       const newUrl = urlInput.value.trim();
       
       if (newUrl && newUrl !== currentDisplayUrl) {
-        let url = newUrl.startsWith('http://') || newUrl.startsWith('https://') 
-          ? newUrl 
-          : 'https://' + newUrl;
+        let url;
+        if (newUrl.includes('.') && !newUrl.includes(' ')) {
+          url = newUrl.startsWith('http://') || newUrl.startsWith('https://') 
+            ? newUrl 
+            : 'https://' + newUrl;
+        } else {
+          url = 'https://duckduckgo.com/?q=' + encodeURIComponent(newUrl);
+        }
         
         if (typeof __uv$config !== 'undefined') {
           const proxiedUrl = __uv$config.prefix + __uv$config.encodeUrl(url);
@@ -658,7 +678,6 @@
           function updateBattery() {
             const level = Math.round(battery.level * 100);
             document.getElementById("battery").textContent = `${level}%`;
-            document.getElementById("footerBattery").textContent = `${level}%`;
           }
           updateBattery();
           battery.addEventListener("levelchange", updateBattery);
@@ -669,10 +688,29 @@
         const now = new Date();
         const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         document.getElementById("time").textContent = timeStr;
-        document.getElementById("footerTime").textContent = timeStr;
       }
       setInterval(updateTime, 1000);
       updateTime();
+
+      function updateCPU() {
+        const cores = navigator.hardwareConcurrency || 'N/A';
+        document.getElementById('footerCPU').textContent = `${cores} cores`;
+      }
+      updateCPU();
+
+      function updatePing() {
+        const start = performance.now();
+        fetch('https://www.google.com/favicon.ico', { mode: 'no-cors' })
+          .then(() => {
+            const ping = Math.round(performance.now() - start);
+            document.getElementById('footerPing').textContent = `Ping: ${ping}ms`;
+          })
+          .catch(() => {
+            document.getElementById('footerPing').textContent = 'Ping: --ms';
+          });
+      }
+      updatePing();
+      setInterval(updatePing, 5000);
     });
   </script>
 </body>
