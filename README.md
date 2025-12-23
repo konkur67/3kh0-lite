@@ -4,3 +4,10 @@ TODO:
 
 - ai is acting up weird.. (thru duck.ai)
 
+- new ui (non ugly)
+
+-devtools
+
+-spotify
+
+- stuff
