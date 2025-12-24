@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Movies | Network Unity</title>
   <link rel="icon" href="/favicon.ico" />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet" />
   <style>
     * {
       margin: 0;
@@ -14,74 +14,114 @@
     }
 
     body {
-      font-family: 'Space Grotesk', sans-serif;
+      font-family: 'Inter', sans-serif;
       background: #000000;
       color: #ffffff;
       min-height: 100vh;
-      padding: 40px 20px;
+      padding: 60px 40px;
+      position: relative;
     }
 
-    .container {
+    .stars {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .star {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      background: white;
+      border-radius: 50%;
+      box-shadow: 0 0 2px rgba(255, 255, 255, 0.5);
+      animation: twinkle 4s infinite;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.2; }
+      50% { opacity: 1; }
+    }
+
+    .content {
+      position: relative;
+      z-index: 2;
       max-width: 1400px;
       margin: 0 auto;
     }
 
+    .back-btn {
+      display: inline-block;
+      padding: 12px 32px;
+      background: rgba(40, 40, 40, 0.8);
+      color: #ffffff;
+      border: 1px solid #444;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      margin-bottom: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
+    }
+
+    .back-btn:hover {
+      background: rgba(60, 60, 60, 0.9);
+      border-color: #666;
+      transform: translateY(-2px);
+      box-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
+    }
+
     h1 {
-      font-size: 3rem;
+      font-size: 3.5rem;
       font-weight: 700;
       letter-spacing: -2px;
       margin-bottom: 40px;
       text-align: center;
-      transition: transform 0.1s ease;
+      transition: all 0.3s ease;
+      text-shadow: 0 0 40px rgba(255, 255, 255, 0.3),
+                   0 0 80px rgba(255, 255, 255, 0.1);
     }
 
     h1:hover {
-      transform: scale(0.97);
-    }
-
-    .back-btn {
-      display: inline-block;
-      padding: 12px 24px;
-      background: #ffffff;
-      color: #000000;
-      border: 2px solid #ffffff;
-      text-decoration: none;
-      font-weight: 600;
-      transition: all 0.1s ease;
-      margin-bottom: 30px;
-    }
-
-    .back-btn:hover {
-      background: #000000;
-      color: #ffffff;
+      text-shadow: 0 0 60px rgba(255, 255, 255, 0.5),
+                   0 0 100px rgba(255, 255, 255, 0.2);
     }
 
     .search-section {
-      background: #000000;
+      background: rgba(20, 20, 20, 0.8);
+      backdrop-filter: blur(10px);
+      border: 1px solid #222;
       color: #ffffff;
       padding: 30px;
       margin-bottom: 30px;
-      border: 2px solid #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
     }
 
     .search-section h2 {
       font-size: 1.5rem;
-      font-weight: 700;
+      font-weight: 600;
       margin-bottom: 20px;
       letter-spacing: -1px;
     }
 
     input[type="text"], select {
       width: 100%;
-      padding: 14px 20px;
-      border: 2px solid #ffffff;
-      background: #000000;
+      padding: 14px 16px;
+      border: 1px solid #333;
+      background: rgba(30, 30, 30, 0.8);
       color: #ffffff;
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 1rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
       outline: none;
-      transition: all 0.1s ease;
+      transition: all 0.3s ease;
       margin-bottom: 15px;
+      border-radius: 8px;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
     }
 
     select {
@@ -89,15 +129,17 @@
     }
 
     input[type="text"]:focus, select:focus {
-      border-color: #cccccc;
+      border-color: #555;
+      background: rgba(40, 40, 40, 0.9);
+      box-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
     }
 
     input[type="text"]::placeholder {
-      color: #666666;
+      color: #555;
     }
 
     select option {
-      background: #000000;
+      background: #1a1a1a;
       color: #ffffff;
     }
 
@@ -110,32 +152,39 @@
 
     .btn {
       padding: 14px 24px;
-      background: #ffffff;
-      color: #000000;
-      border: 2px solid #ffffff;
+      background: rgba(40, 40, 40, 0.8);
+      color: #ffffff;
+      border: 1px solid #444;
       cursor: pointer;
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 1rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
       font-weight: 600;
-      transition: all 0.1s ease;
+      transition: all 0.3s ease;
       width: 100%;
+      border-radius: 8px;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
     }
 
     .btn:hover {
-      background: #000000;
-      color: #ffffff;
+      background: rgba(60, 60, 60, 0.9);
+      border-color: #666;
+      transform: translateY(-2px);
+      box-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
     }
 
     .btn:active {
-      transform: scale(0.98);
+      transform: translateY(0);
     }
 
     .player-container {
-      background: #000000;
-      border: 2px solid #ffffff;
-      padding: 20px;
+      background: rgba(20, 20, 20, 0.8);
+      backdrop-filter: blur(10px);
+      border: 1px solid #222;
+      padding: 24px;
       margin-bottom: 30px;
       display: none;
+      border-radius: 12px;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
     }
 
     .player-container.active {
@@ -152,32 +201,36 @@
     }
 
     .current-source {
-      color: #cccccc;
-      font-size: 0.9rem;
+      color: #888;
+      font-size: 0.95rem;
+      font-weight: 600;
     }
 
     .source-dropdown {
       padding: 10px 20px;
-      background: #000000;
+      background: rgba(30, 30, 30, 0.8);
       color: #ffffff;
-      border: 2px solid #ffffff;
-      font-family: 'Space Grotesk', sans-serif;
+      border: 1px solid #444;
+      font-family: 'Inter', sans-serif;
       font-size: 0.9rem;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.1s ease;
+      transition: all 0.3s ease;
+      border-radius: 8px;
     }
 
     .source-dropdown:hover {
-      background: #ffffff;
-      color: #000000;
+      background: rgba(50, 50, 50, 0.9);
+      border-color: #555;
     }
 
     iframe {
       width: 100%;
       height: 600px;
-      border: 2px solid #ffffff;
+      border: 1px solid #222;
       background: #000000;
+      border-radius: 8px;
+      pointer-events: auto;
     }
 
     .popular-section, .search-results {
@@ -192,11 +245,14 @@
     }
 
     .search-results {
-      background: #000000;
-      border: 2px solid #ffffff;
+      background: rgba(20, 20, 20, 0.8);
+      backdrop-filter: blur(10px);
+      border: 1px solid #222;
       padding: 30px;
       margin-bottom: 30px;
       display: none;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
     }
 
     .search-results.active {
@@ -205,29 +261,30 @@
 
     .movies-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
       gap: 20px;
     }
 
     .movie-card {
-      background: #000000;
-      border: 2px solid #ffffff;
+      background: rgba(20, 20, 20, 0.8);
+      backdrop-filter: blur(10px);
+      border: 1px solid #222;
       cursor: pointer;
-      transition: transform 0.1s ease;
+      transition: all 0.3s ease;
       overflow: hidden;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
     }
 
     .movie-card:hover {
-      transform: translateY(-4px);
-    }
-
-    .movie-card:active {
-      transform: translateY(0);
+      transform: translateY(-8px);
+      border-color: #333;
+      box-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
     }
 
     .movie-poster {
       width: 100%;
-      height: 300px;
+      aspect-ratio: 2/3;
       object-fit: cover;
       display: block;
       background: #111111;
@@ -238,27 +295,32 @@
     }
 
     .movie-title {
-      font-size: 1rem;
-      font-weight: 700;
+      font-size: 0.95rem;
+      font-weight: 600;
       margin-bottom: 5px;
       letter-spacing: -0.5px;
+      line-height: 1.3;
     }
 
     .movie-year {
       font-size: 0.85rem;
-      color: #cccccc;
+      color: #888;
     }
 
     .loading {
       text-align: center;
       padding: 40px;
-      font-size: 1.2rem;
-      color: #cccccc;
+      font-size: 1.1rem;
+      color: #666;
     }
 
     @media (max-width: 768px) {
+      body {
+        padding: 40px 20px;
+      }
+
       h1 {
-        font-size: 2rem;
+        font-size: 2.5rem;
       }
 
       iframe {
@@ -270,24 +332,23 @@
       }
 
       .movies-grid {
-        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-      }
-
-      .movie-poster {
-        height: 225px;
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 15px;
       }
     }
   </style>
 </head>
 <body>
-  <div class="container">
+  <div class="stars" id="stars"></div>
+  
+  <div class="content">
     <a href="/index.html" class="back-btn">← Back</a>
     
-    <h1>Movies & TV</h1>
+    <h1>Movies & TV.</h1>
 
     <div class="search-section">
       <h2>Search & Watch</h2>
-      <input type="text" id="searchInput" placeholder="Search for movies or TV shows..." />
+      <input type="text" id="searchInput" placeholder="Search for movies or TV shows..." onkeypress="if(event.key==='Enter') performSearch()" />
       
       <div class="input-group">
         <select id="contentType">
@@ -296,12 +357,10 @@
         </select>
         
         <select id="sourceSelect">
-          <option value="vidlink">VidLink Pro</option>
-          <option value="sanction">Sanction TV</option>
           <option value="vidsrc">VidSrc</option>
           <option value="vidsrcpro">VidSrc Pro</option>
-          <option value="vidsrcto">VidSrc.to</option>
           <option value="embedsu">Embed.su</option>
+          <option value="vidsrcto">VidSrc.to</option>
           <option value="2embed">2Embed</option>
         </select>
       </div>
@@ -310,7 +369,7 @@
     </div>
 
     <div class="search-results" id="searchResults">
-      <h2>Results</h2>
+      <h2>Search Results</h2>
       <div class="movies-grid" id="searchGrid"></div>
     </div>
 
@@ -318,16 +377,14 @@
       <div class="player-header">
         <div class="current-source" id="currentSource"></div>
         <select class="source-dropdown" id="playerSource" onchange="switchSource()">
-          <option value="vidlink">VidLink Pro</option>
-          <option value="sanction">Sanction TV</option>
           <option value="vidsrc">VidSrc</option>
           <option value="vidsrcpro">VidSrc Pro</option>
-          <option value="vidsrcto">VidSrc.to</option>
           <option value="embedsu">Embed.su</option>
+          <option value="vidsrcto">VidSrc.to</option>
           <option value="2embed">2Embed</option>
         </select>
       </div>
-      <iframe id="player" allowfullscreen></iframe>
+      <iframe id="player" allowfullscreen sandbox="allow-scripts allow-same-origin allow-presentation"></iframe>
     </div>
 
     <div class="popular-section">
@@ -339,25 +396,41 @@
   </div>
 
   <script>
+    function createStars() {
+      const starsContainer = document.getElementById('stars');
+      const starCount = 150;
+      
+      for (let i = 0; i < starCount; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+        star.style.left = Math.random() * 100 + '%';
+        star.style.top = Math.random() * 100 + '%';
+        star.style.animationDelay = Math.random() * 4 + 's';
+        star.style.animationDuration = (Math.random() * 4 + 3) + 's';
+        starsContainer.appendChild(star);
+      }
+    }
+
+    createStars();
+
     let currentType = 'movie';
     let currentId = '';
     let currentTitle = '';
+    const TMDB_API_KEY = 'YOUR_API_KEY_HERE';
 
     function getEmbedUrl(source, type, id) {
       const urls = {
-        vidsrc: `https://vidsrc.me/embed/${type}?${type === 'movie' ? 'imdb' : 'tmdb'}=${id}`,
+        vidsrc: `https://vidsrc.xyz/embed/${type}/${id}`,
         vidsrcpro: `https://vidsrc.pro/embed/${type}/${id}`,
         vidsrcto: `https://vidsrc.to/embed/${type}/${id}`,
-        vidlink: `https://vidlink.pro/${type}/${id}`,
-        sanction: `https://stream.sanction.tv/${type}/${id}`,
         embedsu: `https://embed.su/embed/${type}/${id}`,
-        '2embed': `https://www.2embed.cc/embed/${id}`
+        '2embed': `https://www.2embed.cc/embed/${type === 'movie' ? id : `${id}/1/1`}`
       };
       return urls[source] || urls.vidsrc;
     }
 
     function performSearch() {
-      const query = document.getElementById('searchInput').value;
+      const query = document.getElementById('searchInput').value.trim();
       const type = document.getElementById('contentType').value;
       
       if (!query) {
@@ -374,7 +447,7 @@
 
       const endpoint = type === 'movie' ? 'search/movie' : 'search/tv';
       
-      fetch(`https://api.themoviedb.org/3/${endpoint}?api_key=YOUR_API_KEY&query=${encodeURIComponent(query)}`)
+      fetch(`https://api.themoviedb.org/3/${endpoint}?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(query)}`)
         .then(response => response.json())
         .then(data => {
           if (data.results && data.results.length > 0) {
@@ -401,11 +474,12 @@
               searchGrid.appendChild(card);
             });
           } else {
-            searchGrid.innerHTML = '<div class="loading">No results found</div>';
+            searchGrid.innerHTML = '<div class="loading">No results found. Try a different search term.</div>';
           }
         })
-        .catch(() => {
-          searchGrid.innerHTML = '<div class="loading">Error searching</div>';
+        .catch(error => {
+          console.error('Search error:', error);
+          searchGrid.innerHTML = '<div class="loading">Error searching. Please try again.</div>';
         });
     }
 
@@ -440,80 +514,39 @@
     function loadPopularMovies() {
       const grid = document.getElementById('moviesGrid');
       
-      const popularMovies = [
-        { id: 278, title: "The Shawshank Redemption", year: "1994", poster: "https://image.tmdb.org/t/p/w500/q6y0Go1tsGEsmtFryDOJo3dEmqu.jpg" },
-        { id: 238, title: "The Godfather", year: "1972", poster: "https://image.tmdb.org/t/p/w500/3bhkrj58Vtu7enYsRolD1fZdja1.jpg" },
-        { id: 240, title: "The Godfather Part II", year: "1974", poster: "https://image.tmdb.org/t/p/w500/hek3koDUyRQk7FIhPXsa6mT2Zc3.jpg" },
-        { id: 424, title: "Schindler's List", year: "1993", poster: "https://image.tmdb.org/t/p/w500/sF1U4EUQS8YHUYjNl3pMGNIQyr0.jpg" },
-        { id: 389, title: "12 Angry Men", year: "1957", poster: "https://image.tmdb.org/t/p/w500/ow3wq89wM8qd5X7hWKxiRfsFf9C.jpg" },
-        { id: 19404, title: "Dilwale Dulhania Le Jayenge", year: "1995", poster: "https://image.tmdb.org/t/p/w500/lfRkUr7DYdHldAqi3PwdQGBRBPM.jpg" },
-        { id: 155, title: "The Dark Knight", year: "2008", poster: "https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg" },
-        { id: 496243, title: "Parasite", year: "2019", poster: "https://image.tmdb.org/t/p/w500/7IiTTgloJzvGI1TAYymCfbfl3vT.jpg" },
-        { id: 129, title: "Spirited Away", year: "2001", poster: "https://image.tmdb.org/t/p/w500/39wmItIWsg5sZMyRUHLkWBcuVCM.jpg" },
-        { id: 497, title: "The Green Mile", year: "1999", poster: "https://image.tmdb.org/t/p/w500/8VG8fDNiy50H4FedGwdSVUPoaJe.jpg" },
-        { id: 680, title: "Pulp Fiction", year: "1994", poster: "https://image.tmdb.org/t/p/w500/d5iIlFn5s0ImszYzBPb8JPIfbXD.jpg" },
-        { id: 13, title: "Forrest Gump", year: "1994", poster: "https://image.tmdb.org/t/p/w500/arw2vcBveWOVZr6pxd9XTd1TdQa.jpg" },
-        { id: 769, title: "GoodFellas", year: "1990", poster: "https://image.tmdb.org/t/p/w500/aKuFiU82s5ISJpGZp7YkIr3kCUd.jpg" },
-        { id: 550, title: "Fight Club", year: "1999", poster: "https://image.tmdb.org/t/p/w500/pB8BM7pdSp6B6Ih7QZ4DrQ3PmJK.jpg" },
-        { id: 122, title: "The Lord of the Rings: The Return of the King", year: "2003", poster: "https://image.tmdb.org/t/p/w500/rCzpDGLbOoPwLjy3OAm5NUPOTrC.jpg" },
-        { id: 274, title: "The Silence of the Lambs", year: "1991", poster: "https://image.tmdb.org/t/p/w500/uS9m8OBk1A8eM9I042bx8XXpqAq.jpg" }
-      ];
-      
-      grid.innerHTML = '';
-      
-      popularMovies.forEach(movie => {
-        const card = document.createElement('div');
-        card.className = 'movie-card';
-        card.onclick = () => loadContent(movie.id, movie.title, 'movie');
-        
-        card.innerHTML = `
-          <img src="${movie.poster}" alt="${movie.title}" class="movie-poster" loading="lazy" />
-          <div class="movie-info">
-            <div class="movie-title">${movie.title}</div>
-            <div class="movie-year">${movie.year}</div>
-          </div>
-        `;
-        
-        grid.appendChild(card);
-      });
+      fetch(`https://api.themoviedb.org/3/movie/popular?api_key=${TMDB_API_KEY}`)
+        .then(response => response.json())
+        .then(data => {
+          if (data.results && data.results.length > 0) {
+            grid.innerHTML = '';
+            data.results.slice(0, 18).forEach(movie => {
+              const card = document.createElement('div');
+              card.className = 'movie-card';
+              card.onclick = () => loadContent(movie.id, movie.title, 'movie');
+              
+              const posterPath = movie.poster_path 
+                ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+                : 'https://via.placeholder.com/200x300/111111/666666?text=No+Poster';
+              
+              card.innerHTML = `
+                <img src="${posterPath}" alt="${movie.title}" class="movie-poster" loading="lazy" />
+                <div class="movie-info">
+                  <div class="movie-title">${movie.title}</div>
+                  <div class="movie-year">${movie.release_date ? movie.release_date.split('-')[0] : 'N/A'}</div>
+                </div>
+              `;
+              
+              grid.appendChild(card);
+            });
+          }
+        })
+        .catch(error => {
+          console.error('Error loading popular movies:', error);
+          grid.innerHTML = '<div class="loading">Error loading movies</div>';
+        });
     }
 
     loadPopularMovies();
-
-    window.onload = function() {
-      const theme = localStorage.getItem('siteTheme') || 'default';
-      const themes = {
-        default: { bg: '#000000', fg: '#ffffff' },
-        dark: { bg: '#1a1a1a', fg: '#e0e0e0' },
-        blue: { bg: '#000000', fg: '#4a9eff' },
-        green: { bg: '#000000', fg: '#00ff88' },
-        purple: { bg: '#000000', fg: '#bb86fc' },
-        red: { bg: '#000000', fg: '#ff5555' }
-      };
-      const colors = themes[theme] || themes.default;
-      
-      document.body.style.background = colors.bg;
-      document.body.style.color = colors.fg;
-      
-      document.querySelectorAll('.search-section, .player-container, .search-results, .movie-card').forEach(el => {
-        el.style.borderColor = colors.fg;
-      });
-      
-      document.querySelectorAll('input[type="text"], select, .source-dropdown').forEach(el => {
-        el.style.borderColor = colors.fg;
-        el.style.color = colors.fg;
-      });
-      
-      document.querySelectorAll('.back-btn').forEach(el => {
-        el.style.background = colors.fg;
-        el.style.color = colors.bg;
-        el.style.borderColor = colors.fg;
-      });
-      
-      document.querySelectorAll('h1, h2').forEach(el => {
-        el.style.color = colors.fg;
-      });
-    };
   </script>
 </body>
 </html>
